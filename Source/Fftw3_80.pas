@@ -102,27 +102,16 @@ type
   TFftw80AllocComplex = function (N: NativeUInt): PFftw80Complex; cdecl;
   TFftw80Free = procedure (Ptr: Pointer); cdecl;
 
-  TFftw80Flops = procedure (const Plan: TFftw80Plan; Add, Mul, FMAs: PDouble); cdecl;
+  TFftw80Flops = procedure (const Plan: TFftw80Plan; out Add, Mul, FMAs: Double); cdecl;
   TFftw80EstimateCost = function (const Plan: TFftw80Plan): Double; cdecl;
   TFftw80Cost = function (const Plan: TFftw80Plan): Double; cdecl;
   TFftw80AlignmentOf = function (Ptr: PExtended): Integer; cdecl;
 
-(*
-const
-  fftw_version: AnsiString;
-  fftw_cc: AnsiString;
-  fftw_codelet_optim: AnsiString;
-
-  fftwf_version: AnsiString;
-  fftwf_cc: AnsiString;
-  fftwf_codelet_optim: AnsiString;
-
-  fftwl_version: AnsiString;
-  fftwl_cc: AnsiString;
-  fftwl_codelet_optim: AnsiString;
-*)
-
 var
+  Fftw80Version: AnsiString;
+  Fftw80CC: AnsiString;
+  Fftw80CodeletOptim: AnsiString;
+
   Fftw80Execute: TFftw80Execute;
   Fftw80PlanDft: TFftw80PlanDft;
   Fftw80PlanDft1D: TFftw80PlanDft1D;
@@ -226,26 +215,26 @@ var
   function Fftw80PlanDftReal2Complex2D(N0, N1: Integer; &In: PExtended; &Out: PFftw80Complex; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_dft_r2c_2d';
   function Fftw80PlanDftReal2Complex3D(N0, N1, N2: Integer; &In: PExtended; &Out: PFftw80Complex; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_dft_r2c_3d';
 
-  function Fftw80PlanManyDftComple2Real(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw80Complex; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PExtended; const onembed: PInteger; OutputStride, OutputDist: Integer; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_many_dft_c2r';
-  function Fftw80PlanDftComple2Real(Rank: Integer; const N: PInteger; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_dft_c2r';
-  function Fftw80PlanDftComple2Real1D(N: Integer; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_dft_c2r_1d';
-  function Fftw80PlanDftComple2Real2D(N0, N1: Integer; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_dft_c2r_2d';
-  function Fftw80PlanDftComple2Real3D(N0, N1, N2: Integer; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_dft_c2r_3d';
+  function Fftw80PlanManyDftComplex2Real(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw80Complex; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PExtended; const onembed: PInteger; OutputStride, OutputDist: Integer; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_many_dft_c2r';
+  function Fftw80PlanDftComplex2Real(Rank: Integer; const N: PInteger; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_dft_c2r';
+  function Fftw80PlanDftComplex2Real1D(N: Integer; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_dft_c2r_1d';
+  function Fftw80PlanDftComplex2Real2D(N0, N1: Integer; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_dft_c2r_2d';
+  function Fftw80PlanDftComplex2Real3D(N0, N1, N2: Integer; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_dft_c2r_3d';
 
   function Fftw80PlanGuruDftReal2Complex(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In: PExtended; &Out: PFftw80Complex; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru_dft_r2c';
-  function Fftw80PlanGuruDftComple2Real(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru_dft_c2r';
-  function Fftw80PlanGuruSplitDftReal2Complex(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In, Ro, Io: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru_split_dft_r2c(';
-  function Fftw80PlanGuruSplitDftComple2Real(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; Ri, Ii, &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru_split_dft_c2r(';
+  function Fftw80PlanGuruDftComplex2Real(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru_dft_c2r';
+  function Fftw80PlanGuruSplitDftReal2Complex(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In, Ro, Io: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru_split_dft_r2c';
+  function Fftw80PlanGuruSplitDftComplex2Real(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; Ri, Ii, &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru_split_dft_c2r';
 
   function Fftw80PlanGuru64DftReal2Complex(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In: PExtended; &Out: PFftw80Complex; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru64_dft_r2c';
-  function Fftw80PlanGuru64DftComple2Real(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru64_dft_c2r';
-  function Fftw80PlanGuru64SplitDftReal2Complex(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In, Ro, Io: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru64_split_dft_r2c(';
-  function Fftw80PlanGuru64SplitDftComple2Real(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; Ri, Ii, &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru64_split_dft_c2r(';
+  function Fftw80PlanGuru64DftComplex2Real(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru64_dft_c2r';
+  function Fftw80PlanGuru64SplitDftReal2Complex(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In, Ro, Io: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru64_split_dft_r2c';
+  function Fftw80PlanGuru64SplitDftComplex2Real(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; Ri, Ii, &Out: PExtended; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_guru64_split_dft_c2r';
 
   procedure Fftw80ExecuteDftReal2Complex(const Plan: TFftw80Plan; &In: PExtended; &Out: PFftw80Complex); cdecl; external CLibFftw80 name 'fftwl_execute_dft_r2c';
-  procedure Fftw80ExecuteDftComple2Real(const Plan: TFftw80Plan; &In: PFftw80Complex; &Out: PExtended); cdecl; external CLibFftw80 name 'fftwl_execute_dft_c2r';
+  procedure Fftw80ExecuteDftComplex2Real(const Plan: TFftw80Plan; &In: PFftw80Complex; &Out: PExtended); cdecl; external CLibFftw80 name 'fftwl_execute_dft_c2r';
   procedure Fftw80ExecuteSplitDftReal2Complex(const Plan: TFftw80Plan; &In, Ro, Io: PExtended); cdecl; external CLibFftw80 name 'fftwl_execute_split_dft_r2c';
-  procedure Fftw80ExecuteSplitDftComple2Real(const Plan: TFftw80Plan; Ri, Ii, &Out: PExtended); cdecl; external CLibFftw80 name 'fftwl_execute_split_dft_c2r';
+  procedure Fftw80ExecuteSplitDftComplex2Real(const Plan: TFftw80Plan; Ri, Ii, &Out: PExtended); cdecl; external CLibFftw80 name 'fftwl_execute_split_dft_c2r';
 
   function Fftw80PlanManyReal2Real(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PExtended; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PExtended; const onembed: PInteger; OutputStride, OutputDist: Integer; const Kind: PFftwReal2RealKind; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_many_r2r';
   function Fftw80PlanReal2Real(Rank: Integer; const N: PInteger; &In, &Out: PExtended; const Kind: PFftwReal2RealKind; Flags: TFftwFlags): TFftw80Plan; cdecl; external CLibFftw80 name 'fftwl_plan_r2r';
@@ -284,11 +273,113 @@ var
   function Fftw80AllocComplex(N: NativeUInt): PFftw80Complex; cdecl; external CLibFftw80 name 'fftwl_alloc_complex';
   procedure Fftw80Free(Ptr: Pointer); cdecl; external CLibFftw80 name 'fftwl_free';
 
-  procedure Fftw80Flops(const Plan: TFftw80Plan; Add, Mul, FMAs: PDouble); cdecl; external CLibFftw80 name 'fftwl_flops';
+  procedure Fftw80Flops(const Plan: TFftw80Plan; out Add, Mul, FMAs: Double); cdecl; external CLibFftw80 name 'fftwl_flops';
   function Fftw80EstimateCost(const Plan: TFftw80Plan): Double; cdecl; external CLibFftw80 name 'fftwl_estimate_cost';
   function Fftw80Cost(const Plan: TFftw80Plan): Double; cdecl; external CLibFftw80 name 'fftwl_cost';
   function Fftw80AlignmentOf(Ptr: PExtended): Integer; cdecl; external CLibFftw80 name 'fftwl_alignment_of';
 {$ENDIF}
+
+type
+  TCustomFftw80 = class
+  private
+    FPlan: TFftw80Plan;
+    function GetAsText: string;
+    function GetEstimateCost: Double;
+  public
+    destructor Destroy; override;
+
+    procedure Execute; overload;
+
+    procedure GetFlops(out Add, Mul, FMAs: Double);
+    function GetCost: Double;
+
+    property AsText: string read GetAsText;
+    property EstimateCost: Double read GetEstimateCost;
+  end;
+
+  TFftw80Dft = class(TCustomFftw80)
+  public
+    constructor Create(Rank: Integer; const N: PInteger; &In, &Out: PFftw80Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
+    constructor Create(N: Integer; &In, &Out: PFftw80Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
+    constructor Create(N0, N1: Integer; &In, &Out: PFftw80Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
+    constructor Create(N0, N1, N2: Integer; &In, &Out: PFftw80Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
+    constructor CreateMany(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw80Complex; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw80Complex; const onembed: PInteger; OutputStride, OutputDist: Integer; Sign: TFftwSign; Flags: TFftwFlags);
+
+    procedure Execute(&In, &Out: PFftw80Complex); overload;
+    procedure Execute(Ri, Ii, Ro, Io: PExtended); overload;
+  end;
+
+  TFftw80DftReal2Complex = class(TCustomFftw80)
+  public
+    constructor Create(Rank: Integer; const N: PInteger; &In: PExtended; &Out: PFftw80Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
+    constructor Create(N: Integer; &In: PExtended; &Out: PFftw80Complex; Flags: TFftwFlags); overload;
+    constructor Create(N0, N1: Integer; &In: PExtended; &Out: PFftw80Complex; Flags: TFftwFlags); overload;
+    constructor Create(N0, N1, N2: Integer; &In: PExtended; &Out: PFftw80Complex; Flags: TFftwFlags); overload;
+    constructor CreateMany(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PExtended; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw80Complex; const onembed: PInteger; OutputStride, OutputDist: Integer; Flags: TFftwFlags);
+
+    procedure Execute(&In: PExtended; &Out: PFftw80Complex); overload;
+    procedure Execute(&In, Ro, Io: PExtended); overload;
+  end;
+
+  TFftw80DftComplex2Real = class(TCustomFftw80)
+  public
+    constructor Create(Rank: Integer; const N: PInteger; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags); overload;
+    constructor Create(N: Integer; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags); overload;
+    constructor Create(N0, N1: Integer; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags); overload;
+    constructor Create(N0, N1, N2: Integer; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags); overload;
+    constructor CreateMany(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw80Complex; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PExtended; const onembed: PInteger; OutputStride, OutputDist: Integer; Flags: TFftwFlags);
+
+    procedure Execute(&In: PFftw80Complex; &Out: PExtended); overload;
+    procedure Execute(Ri, Ii, &Out: PExtended); overload;
+  end;
+
+  TFftw80Real2Real = class(TCustomFftw80)
+  public
+    constructor Create(Rank: Integer; const N: PInteger; &In, &Out: PExtended; const Kind: PFftwReal2RealKind; Flags: TFftwFlags); overload;
+    constructor Create(N: Integer; &In, &Out: PExtended; Kind: TFftwReal2RealKind; Flags: TFftwFlags); overload;
+    constructor Create(N0, N1: Integer; &In, &Out: PExtended; Kind0, Kind1: TFftwReal2RealKind; Flags: TFftwFlags); overload;
+    constructor Create(N0, N1, N2: Integer; &In, &Out: PExtended; Kind0, Kind1, Kind2: TFftwReal2RealKind; Flags: TFftwFlags); overload;
+    constructor CreateMany(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PExtended; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PExtended; const onembed: PInteger; OutputStride, OutputDist: Integer; const Kind: PFftwReal2RealKind; Flags: TFftwFlags);
+
+    procedure Execute(&In, &Out: PExtended); overload;
+  end;
+
+  TFftw80Guru = class(TCustomFftw80)
+  public
+    constructor Create(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In, &Out: PFftw80Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; Ri, Ii, Ro, Io: PExtended; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In: PExtended; &Out: PFftw80Complex; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In, &Out: PExtended; const Kind: PFftwReal2RealKind; Flags: TFftwFlags); overload;
+    constructor CreateSplitDftReal2Complex(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In, Ro, Io: PExtended; Flags: TFftwFlags); overload;
+    constructor CreateSplitDftComplex2Real(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; Ri, Ii, &Out: PExtended; Flags: TFftwFlags); overload;
+  end;
+
+  TFftw80Guru64 = class(TCustomFftw80)
+  public
+    constructor Create(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In, &Out: PFftw80Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; Ri, Ii, Ro, Io: PExtended; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In: PExtended; &Out: PFftw80Complex; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In, &Out: PExtended; const Kind: PFftwReal2RealKind; Flags: TFftwFlags); overload;
+    constructor CreateSplitDftReal2Complex(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In, Ro, Io: PExtended; Flags: TFftwFlags); overload;
+    constructor CreateSplitDftComplex2Real(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; Ri, Ii, &Out: PExtended; Flags: TFftwFlags); overload;
+  end;
+
+  TFftw80Wisdom = class sealed
+  public
+    class procedure ForgetWisdom;
+    class function ExportToFilename(const FileName: TFileName): Integer;
+    class procedure ExportToFile(var OutputFile: file);
+    class function ExportToString: AnsiString;
+    class procedure &Export(WriteChar: TFftwWriteCharFunc; Data: Pointer);
+
+    class function ImportSystem: Integer;
+    class function ImportFromFilename(const FileName: TFileName): Integer;
+    class function ImportFromFile(var InputFile: file): Integer;
+    class function ImportFromString(const InputString: AnsiString): Integer;
+    class function &Import(ReadChar: TFftwReadCharFunc; Data: Pointer): Integer;
+  end;
 
 implementation
 
@@ -296,6 +387,394 @@ implementation
 uses
   Windows;
 {$ENDIF}
+
+
+{ TCustomFftw80 }
+
+destructor TCustomFftw80.Destroy;
+begin
+  Fftw80DestroyPlan(FPlan);
+end;
+
+procedure TCustomFftw80.Execute;
+begin
+  Fftw80Execute(FPlan);
+end;
+
+function TCustomFftw80.GetAsText: string;
+begin
+  Result := string(Fftw80SPrintPlan(FPlan));
+end;
+
+function TCustomFftw80.GetEstimateCost: Double;
+begin
+  Result := Fftw80EstimateCost(FPlan);
+end;
+
+procedure TCustomFftw80.GetFlops(out Add, Mul, FMAs: Double);
+begin
+  Fftw80Flops(FPlan, Add, Mul, FMAs);
+end;
+
+function TCustomFftw80.GetCost: Double;
+begin
+  Result := Fftw80Cost(FPlan);
+end;
+
+
+{ TFftw80Dft }
+
+constructor TFftw80Dft.Create(Rank: Integer; const N: PInteger; &In,
+  &Out: PFftw80Complex; Sign: TFftwSign; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDft(Rank, N, &In, &Out, Sign, Flags);
+end;
+
+constructor TFftw80Dft.Create(N: Integer; &In, &Out: PFftw80Complex;
+  Sign: TFftwSign; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDft1D(N, &In, &Out, Sign, Flags);
+end;
+
+constructor TFftw80Dft.Create(N0, N1: Integer; &In, &Out: PFftw80Complex;
+  Sign: TFftwSign; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDft2D(N0, N1, &In, &Out, Sign, Flags);
+end;
+
+constructor TFftw80Dft.Create(N0, N1, N2: Integer; &In, &Out: PFftw80Complex;
+  Sign: TFftwSign; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDft3D(N0, N1, N2, &In, &Out, Sign, Flags);
+end;
+
+constructor TFftw80Dft.CreateMany(Rank: Integer; const N: PInteger;
+  HowMany: Integer; &In: PFftw80Complex; const inembed: PInteger; InputStride,
+  InputDist: Integer; &Out: PFftw80Complex; const onembed: PInteger;
+  OutputStride, OutputDist: Integer; Sign: TFftwSign; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanManyDft(Rank, N, HowMany, &In, inembed, InputStride,
+    InputDist, &Out, onembed, OutputStride, OutputDist, Sign, Flags);
+end;
+
+procedure TFftw80Dft.Execute(&In, &Out: PFftw80Complex);
+begin
+  Fftw80ExecuteDft(FPlan, &In, &Out);
+end;
+
+procedure TFftw80Dft.Execute(Ri, Ii, Ro, Io: PExtended);
+begin
+  Fftw80ExecuteSplitDft(FPlan, Ri, Ii, Ro, Io);
+end;
+
+
+{ TFftw80DftReal2Complex }
+
+constructor TFftw80DftReal2Complex.Create(Rank: Integer; const N: PInteger;
+  &In: PExtended; &Out: PFftw80Complex; Sign: TFftwSign; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDftReal2Complex(Rank, N, &In, &Out, Flags);
+end;
+
+constructor TFftw80DftReal2Complex.Create(N: Integer; &In: PExtended;
+  &Out: PFftw80Complex; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDftReal2Complex1D(N, &In, &Out, Flags);
+end;
+
+constructor TFftw80DftReal2Complex.Create(N0, N1: Integer; &In: PExtended;
+  &Out: PFftw80Complex; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDftReal2Complex2D(N0, N1, &In, &Out, Flags);
+end;
+
+constructor TFftw80DftReal2Complex.Create(N0, N1, N2: Integer; &In: PExtended;
+  &Out: PFftw80Complex; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDftReal2Complex3D(N0, N1, N2, &In, &Out, Flags);
+end;
+
+constructor TFftw80DftReal2Complex.CreateMany(Rank: Integer; const N: PInteger;
+  HowMany: Integer; &In: PExtended; const inembed: PInteger; InputStride,
+  InputDist: Integer; &Out: PFftw80Complex; const onembed: PInteger;
+  OutputStride, OutputDist: Integer; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanManyDftReal2Complex(Rank, N, HowMany, &In, inembed, InputStride,
+    InputDist, &Out, onembed, OutputStride, OutputDist, Flags);
+end;
+
+procedure TFftw80DftReal2Complex.Execute(&In: PExtended; &Out: PFftw80Complex);
+begin
+  Fftw80ExecuteDftReal2Complex(FPlan, &In, &Out);
+end;
+
+procedure TFftw80DftReal2Complex.Execute(&In, Ro, Io: PExtended);
+begin
+  Fftw80ExecuteSplitDftReal2Complex(FPlan, &In, Ro, Io);
+end;
+
+
+{ TFftw80DftComplex2Real }
+
+constructor TFftw80DftComplex2Real.Create(Rank: Integer; const N: PInteger;
+  &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDftComplex2Real(Rank, N, &In, &Out, Flags);
+end;
+
+constructor TFftw80DftComplex2Real.Create(N: Integer; &In: PFftw80Complex; &Out: PExtended;
+  Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDftComplex2Real1D(N, &In, &Out, Flags);
+end;
+
+constructor TFftw80DftComplex2Real.Create(N0, N1: Integer; &In: PFftw80Complex; &Out: PExtended;
+  Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDftComplex2Real2D(N0, N1, &In, &Out, Flags);
+end;
+
+constructor TFftw80DftComplex2Real.Create(N0, N1, N2: Integer; &In: PFftw80Complex; &Out: PExtended;
+  Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanDftComplex2Real3D(N0, N1, N2, &In, &Out, Flags);
+end;
+
+constructor TFftw80DftComplex2Real.CreateMany(Rank: Integer; const N: PInteger;
+  HowMany: Integer; &In: PFftw80Complex; const inembed: PInteger; InputStride,
+  InputDist: Integer; &Out: PExtended; const onembed: PInteger;
+  OutputStride, OutputDist: Integer; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanManyDftComplex2Real(Rank, N, HowMany, &In, inembed, InputStride,
+    InputDist, &Out, onembed, OutputStride, OutputDist, Flags);
+end;
+
+procedure TFftw80DftComplex2Real.Execute(&In: PFftw80Complex; &Out: PExtended);
+begin
+  Fftw80ExecuteDftComplex2Real(FPlan, &In, &Out);
+end;
+
+procedure TFftw80DftComplex2Real.Execute(Ri, Ii, &Out: PExtended);
+begin
+  Fftw80ExecuteSplitDftComplex2Real(FPlan, Ri, Ii, &Out);
+end;
+
+
+{ TFftw80Real2Real }
+
+constructor TFftw80Real2Real.Create(Rank: Integer; const N: PInteger;
+  &In, &Out: PExtended; const Kind: PFftwReal2RealKind; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanReal2Real(Rank, N, &In, &Out, Kind, Flags);
+end;
+
+constructor TFftw80Real2Real.Create(N: Integer; &In, &Out: PExtended;
+  Kind: TFftwReal2RealKind; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanReal2Real1D(N, &In, &Out, Kind, Flags);
+end;
+
+constructor TFftw80Real2Real.Create(N0, N1: Integer; &In, &Out: PExtended;
+  Kind0, Kind1: TFftwReal2RealKind; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanReal2Real2D(N0, N1, &In, &Out, Kind0, Kind1, Flags);
+end;
+
+constructor TFftw80Real2Real.Create(N0, N1, N2: Integer; &In, &Out: PExtended;
+  Kind0, Kind1, Kind2: TFftwReal2RealKind; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanReal2Real3D(N0, N1, N2, &In, &Out, Kind0, Kind1, Kind2,
+    Flags);
+end;
+
+constructor TFftw80Real2Real.CreateMany(Rank: Integer; const N: PInteger;
+  HowMany: Integer; &In: PExtended; const inembed: PInteger; InputStride,
+  InputDist: Integer; &Out: PExtended; const onembed: PInteger;
+  OutputStride, OutputDist: Integer; const Kind: PFftwReal2RealKind;
+  Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanManyReal2Real(Rank, N, HowMany, &In, inembed, InputStride,
+    InputDist, &Out, onembed, OutputStride, OutputDist, Kind, Flags);
+end;
+
+procedure TFftw80Real2Real.Execute(&In, &Out: PExtended);
+begin
+  Fftw80ExecuteReal2Real(FPlan, &In, &Out);
+end;
+
+
+{ TFftw80Guru }
+
+constructor TFftw80Guru.Create(Rank: Integer; const Dimensions: PFftwIoDim;
+  HowManyRank: Integer; const HowManyDimensions: PFftwIoDim;
+  &In, &Out: PFftw80Complex; Sign: TFftwSign; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuruDft(Rank, Dimensions, HowManyRank, HowManyDimensions,
+    &In, &Out, Sign, Flags);
+end;
+
+constructor TFftw80Guru.Create(Rank: Integer; const Dimensions: PFftwIoDim;
+  HowManyRank: Integer; const HowManyDimensions: PFftwIoDim;
+  Ri, Ii, Ro, Io: PExtended; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuruSplitDft(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, Ri, Ii, Ro, Io, Flags);
+end;
+
+constructor TFftw80Guru.Create(Rank: Integer; const Dimensions: PFftwIoDim;
+  HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In: PExtended;
+  &Out: PFftw80Complex; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuruDftReal2Complex(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, &In, &Out, Flags);
+end;
+
+constructor TFftw80Guru.Create(Rank: Integer; const Dimensions: PFftwIoDim;
+  HowManyRank: Integer; const HowManyDimensions: PFftwIoDim;
+  &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuruDftComplex2Real(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, &In, &Out, Flags);
+end;
+
+constructor TFftw80Guru.Create(Rank: Integer; const Dimensions: PFftwIoDim;
+  HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In, &Out: PExtended;
+  const Kind: PFftwReal2RealKind; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuruReal2Real(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, &In, &Out, Kind, Flags);
+end;
+
+constructor TFftw80Guru.CreateSplitDftReal2Complex(Rank: Integer;
+  const Dimensions: PFftwIoDim; HowManyRank: Integer;
+  const HowManyDimensions: PFftwIoDim; &In, Ro, Io: PExtended; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuruSplitDftReal2Complex(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, &In, Ro, Io, Flags);
+end;
+
+constructor TFftw80Guru.CreateSplitDftComplex2Real(Rank: Integer;
+  const Dimensions: PFftwIoDim; HowManyRank: Integer;
+  const HowManyDimensions: PFftwIoDim; Ri, Ii, &Out: PExtended;
+  Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuruSplitDftComplex2Real(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, Ri, Ii, &Out, Flags);
+end;
+
+
+{ TFftw80Guru64 }
+
+constructor TFftw80Guru64.Create(Rank: Integer; const Dimensions: PFftwIoDim64;
+  HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64;
+  &In, &Out: PFftw80Complex; Sign: TFftwSign; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuru64Dft(Rank, Dimensions, HowManyRank, HowManyDimensions,
+    &In, &Out, Sign, Flags);
+end;
+
+constructor TFftw80Guru64.Create(Rank: Integer; const Dimensions: PFftwIoDim64;
+  HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64;
+  Ri, Ii, Ro, Io: PExtended; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuru64SplitDft(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, Ri, Ii, Ro, Io, Flags);
+end;
+
+constructor TFftw80Guru64.Create(Rank: Integer; const Dimensions: PFftwIoDim64;
+  HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In: PExtended;
+  &Out: PFftw80Complex; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuru64DftReal2Complex(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, &In, &Out, Flags);
+end;
+
+constructor TFftw80Guru64.Create(Rank: Integer; const Dimensions: PFftwIoDim64;
+  HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64;
+  &In: PFftw80Complex; &Out: PExtended; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuru64DftComplex2Real(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, &In, &Out, Flags);
+end;
+
+constructor TFftw80Guru64.Create(Rank: Integer; const Dimensions: PFftwIoDim64;
+  HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64;
+  &In, &Out: PExtended; const Kind: PFftwReal2RealKind; Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuru64Real2Real(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, &In, &Out, Kind, Flags);
+end;
+
+constructor TFftw80Guru64.CreateSplitDftReal2Complex(Rank: Integer;
+  const Dimensions: PFftwIoDim64; HowManyRank: Integer;
+  const HowManyDimensions: PFftwIoDim64; &In, Ro, Io: PExtended;
+  Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuru64SplitDftReal2Complex(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, &In, Ro, Io, Flags);
+end;
+
+constructor TFftw80Guru64.CreateSplitDftComplex2Real(Rank: Integer;
+  const Dimensions: PFftwIoDim64; HowManyRank: Integer;
+  const HowManyDimensions: PFftwIoDim64; Ri, Ii, &Out: PExtended;
+  Flags: TFftwFlags);
+begin
+  FPlan := Fftw80PlanGuru64SplitDftComplex2Real(Rank, Dimensions, HowManyRank,
+    HowManyDimensions, Ri, Ii, &Out, Flags);
+end;
+
+
+{ TFftw80Wisdom }
+
+class procedure TFftw80Wisdom.ForgetWisdom;
+begin
+  Fftw80ForgetWisdom;
+end;
+
+class function TFftw80Wisdom.ExportToFilename(const FileName: TFileName): Integer;
+begin
+  Result := Fftw80ExportWisdomToFilename(PAnsiChar(AnsiString(FileName)));
+end;
+
+class procedure TFftw80Wisdom.ExportToFile(var OutputFile: file);
+begin
+  Fftw80ExportWisdomToFile(OutputFile);
+end;
+
+class function TFftw80Wisdom.ExportToString: AnsiString;
+begin
+  Result := Fftw80ExportWisdomToString;
+end;
+
+class procedure TFftw80Wisdom.&Export(WriteChar: TFftwWriteCharFunc; Data: Pointer);
+begin
+  Fftw80ExportWisdom(WriteChar, Data);
+end;
+
+class function TFftw80Wisdom.ImportSystem: Integer;
+begin
+  Result := Fftw80ImportSystemWisdom;
+end;
+
+class function TFftw80Wisdom.ImportFromFilename(const FileName: TFileName): Integer;
+begin
+  Result := Fftw80ImportWisdomFromFilename(PAnsiChar(AnsiString(FileName)));
+end;
+
+class function TFftw80Wisdom.ImportFromFile(var InputFile: file): Integer;
+begin
+  Result := Fftw80ImportWisdomFromFile(InputFile);
+end;
+
+class function TFftw80Wisdom.ImportFromString(const InputString: AnsiString): Integer;
+begin
+  Result := Fftw80ImportWisdomFromString(PAnsiChar(AnsiString(InputString)));
+end;
+
+class function TFftw80Wisdom.&Import(ReadChar: TFftwReadCharFunc; Data: Pointer): Integer;
+begin
+  Result := Fftw80ImportWisdom(ReadChar, Data);
+end;
 
 
 {$IFDEF DynLink}
@@ -317,7 +796,9 @@ begin
   LibFftwHandle := LoadLibrary(CLibFftw80);
   if LibFftwHandle <> 0 then
     try
-      // Move(GetProcAddress(CSfmlSystemHandle, PAnsiChar('sfTime_Zero'))^, SfmlTimeZero, SizeOf(SfmlTimeZero));
+      Fftw80Version := PAnsiChar(GetProcAddress(LibFftwHandle, PAnsiChar('fftwl_version')));
+      Fftw80CC := PAnsiChar(GetProcAddress(LibFftwHandle, PAnsiChar('fftwl_cc')));
+      Fftw80CodeletOptim := PAnsiChar(GetProcAddress(LibFftwHandle, PAnsiChar('fftwl_codelet_optim')));
 
       Fftw80Execute := BindFunction('fftwl_execute');
       Fftw80PlanDft := BindFunction('fftwl_plan_dft');

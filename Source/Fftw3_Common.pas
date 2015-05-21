@@ -18,9 +18,17 @@ type
   );
 
   TFftwReal2RealKind = (
-    fkR2HC = 0, fkHC2R = 1, fkDHT = 2,
-    fkREDFT00 = 3, fkREDFT01 = 4, fkREDFT10 = 5, fkREDFT11 = 6,
-    fkRODFT00 = 7, fkRODFT01 = 8, fkRODFT10 = 9, fkRODFT11 = 10
+    fkReal2HalfComplex = 0,
+    fkHalfComplex2Real = 1,
+    fkDiscreteHartleyTransform = 2,
+    fkRealEvenDFT00 = 3,
+    fkRealEvenDFT01 = 4,
+    fkRealEvenDFT10 = 5,
+    fkRealEvenDFT11 = 6,
+    fkRealOddDFT00 = 7,
+    fkRealOddDFT01 = 8,
+    fkRealOddDFT10 = 9,
+    fkRealOddDFT11 = 10
   );
   PFftwReal2RealKind = ^TFftwReal2RealKind;
 
@@ -39,7 +47,7 @@ type
   PFftwIoDim64 = ^TFftwIoDim64;
 
   TFftwWriteCharFunc = procedure (c: AnsiChar; d: Pointer);
-  TFftwReadCharFunc = function(d: Pointer): PInteger;
+  TFftwReadCharFunc = function (d: Pointer): PInteger;
 
 type
   TFftwFlag = (
