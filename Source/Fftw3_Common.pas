@@ -6,12 +6,6 @@ const
   CFftwNoTimelimit = -1.0;
 
 type
-  TReal32 = Single;
-  TComplex32 = record
-    Re, Im: Single;
-  end;
-
-type
   TFftwSign = (
     fsForward = -1,
     fsBackward = +1
@@ -46,8 +40,8 @@ type
   end;
   PFftwIoDim64 = ^TFftwIoDim64;
 
-  TFftwWriteCharFunc = procedure (c: AnsiChar; d: Pointer);
-  TFftwReadCharFunc = function (d: Pointer): PInteger;
+  TFftwWriteCharFunc = procedure (Data: AnsiChar; Ptr: Pointer); cdecl;
+  TFftwReadCharFunc = function (Ptr: Pointer): PAnsiChar; cdecl;
 
 type
   TFftwFlag = (

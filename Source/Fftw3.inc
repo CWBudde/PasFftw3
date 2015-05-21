@@ -1,1 +1,1 @@
-{-$DEFINE DynLink}
+{$DEFINE DynLink}
