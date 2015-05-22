@@ -3,7 +3,12 @@ unit TestFftw3_80;
 interface
 
 uses
-  TestFramework, Fftw3_Common, SysUtils, Fftw3_80;
+{$IFNDEF FPC}
+  TestFramework,
+{$ELSE}
+  FPCUnit, TestUtils, TestRegistry,
+{$ENDIF}
+  Fftw3_Common, Classes, SysUtils, Fftw3_80;
 
 const
   CFFTSize = 8192;
@@ -95,6 +100,8 @@ type
   end;
 
   TestTFftw80Wisdom = class(TTestCase)
+  private
+    FDataStream: TMemoryStream;
   public
     procedure SetUp; override;
     procedure TearDown; override;
@@ -553,21 +560,30 @@ end;
 procedure FftwWriteCharFunc(c: AnsiChar; Ptr: Pointer); cdecl;
 begin
   Assert(TObject(Ptr) is TestTFftw80Wisdom);
+  TestTFftw80Wisdom(Ptr).FDataStream.Write(C, 1);
 end;
 
 function FftwReadCharFunc(Ptr: Pointer): PAnsiChar; cdecl;
 begin
   Assert(TObject(Ptr) is TestTFftw80Wisdom);
+  Result := TestTFftw80Wisdom(Ptr).FDataStream.Memory;
 end;
 
 procedure TestTFftw80Wisdom.TestImportExport;
 var
   ReturnValue: Integer;
 begin
-  TFftw80Wisdom.Export(FftwWriteCharFunc, Self);
+  FDataStream := TMemoryStream.Create;
+  try
+    TFftw80Wisdom.Export(FftwWriteCharFunc, Self);
+    CheckTrue(FDataStream.Size > 0);
 
-  ReturnValue := TFftw80Wisdom.Import(FftwReadCharFunc, Self);
-  CheckEquals(0, ReturnValue);
+    FDataStream.Position := 0;
+    ReturnValue := TFftw80Wisdom.Import(FftwReadCharFunc, Self);
+    CheckEquals(0, ReturnValue);
+  finally
+    FDataStream.Free;
+  end;
 end;
 
 procedure TestTFftw80Wisdom.TestImportSystem;
@@ -579,13 +595,13 @@ begin
 end;
 
 initialization
-  RegisterTest(TestTFftw80Dft.Suite);
-  RegisterTest(TestTFftw80DftReal2Complex.Suite);
-  RegisterTest(TestTFftw80DftComplex2Real.Suite);
-  RegisterTest(TestTFftw80Real2Real.Suite);
+  RegisterTest('Fftw80', TestTFftw80Dft.Suite);
+  RegisterTest('Fftw80', TestTFftw80DftReal2Complex.Suite);
+  RegisterTest('Fftw80', TestTFftw80DftComplex2Real.Suite);
+  RegisterTest('Fftw80', TestTFftw80Real2Real.Suite);
 (*
-  RegisterTest(TestTFftw80Guru.Suite);
-  RegisterTest(TestTFftw80Guru64.Suite);
+  RegisterTest('Fftw80', TestTFftw80Guru.Suite);
+  RegisterTest('Fftw80', TestTFftw80Guru64.Suite);
 *)
-  RegisterTest(TestTFftw80Wisdom.Suite);
+  RegisterTest('Fftw80', TestTFftw80Wisdom.Suite);
 end.

@@ -3,7 +3,12 @@ unit TestFftw3_32;
 interface
 
 uses
-  TestFramework, Fftw3_Common, Classes, SysUtils, Fftw3_32;
+{$IFNDEF FPC}
+  TestFramework,
+{$ELSE}
+  FPCUnit, TestUtils, TestRegistry,
+{$ENDIF}
+  Fftw3_Common, Classes, SysUtils, Fftw3_32;
 
 const
   CFFTSize = 8192;
@@ -590,13 +595,13 @@ begin
 end;
 
 initialization
-  RegisterTest(TestTFftw32Dft.Suite);
-  RegisterTest(TestTFftw32DftReal2Complex.Suite);
-  RegisterTest(TestTFftw32DftComplex2Real.Suite);
-  RegisterTest(TestTFftw32Real2Real.Suite);
+  RegisterTest('Fftw32', TestTFftw32Dft.Suite);
+  RegisterTest('Fftw32', TestTFftw32DftReal2Complex.Suite);
+  RegisterTest('Fftw32', TestTFftw32DftComplex2Real.Suite);
+  RegisterTest('Fftw32', TestTFftw32Real2Real.Suite);
 (*
   RegisterTest(TestTFftw32Guru.Suite);
   RegisterTest(TestTFftw32Guru64.Suite);
 *)
-  RegisterTest(TestTFftw32Wisdom.Suite);
+  RegisterTest('Fftw32', TestTFftw32Wisdom.Suite);
 end.

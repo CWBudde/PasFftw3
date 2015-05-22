@@ -3,7 +3,12 @@ unit TestFftw3_64;
 interface
 
 uses
-  TestFramework, Fftw3_Common, SysUtils, Fftw3_64;
+{$IFNDEF FPC}
+  TestFramework,
+{$ELSE}
+  FPCUnit, TestUtils, TestRegistry,
+{$ENDIF}
+  Fftw3_Common, Classes, SysUtils, Fftw3_64;
 
 const
   CFFTSize = 8192;
@@ -95,6 +100,8 @@ type
   end;
 
   TestTFftw64Wisdom = class(TTestCase)
+  private
+    FDataStream: TMemoryStream;
   public
     procedure SetUp; override;
     procedure TearDown; override;
@@ -553,21 +560,30 @@ end;
 procedure FftwWriteCharFunc(c: AnsiChar; Ptr: Pointer); cdecl;
 begin
   Assert(TObject(Ptr) is TestTFftw64Wisdom);
+  TestTFftw64Wisdom(Ptr).FDataStream.Write(C, 1);
 end;
 
 function FftwReadCharFunc(Ptr: Pointer): PAnsiChar; cdecl;
 begin
   Assert(TObject(Ptr) is TestTFftw64Wisdom);
+  Result := TestTFftw64Wisdom(Ptr).FDataStream.Memory;
 end;
 
 procedure TestTFftw64Wisdom.TestImportExport;
 var
   ReturnValue: Integer;
 begin
-  TFftw64Wisdom.Export(FftwWriteCharFunc, Self);
+  FDataStream := TMemoryStream.Create;
+  try
+    TFftw64Wisdom.Export(FftwWriteCharFunc, Self);
+    CheckTrue(FDataStream.Size > 0);
 
-  ReturnValue := TFftw64Wisdom.Import(FftwReadCharFunc, Self);
-  CheckEquals(0, ReturnValue);
+    FDataStream.Position := 0;
+    ReturnValue := TFftw64Wisdom.Import(FftwReadCharFunc, Self);
+    CheckEquals(0, ReturnValue);
+  finally
+    FDataStream.Free;
+  end;
 end;
 
 procedure TestTFftw64Wisdom.TestImportSystem;
@@ -579,13 +595,13 @@ begin
 end;
 
 initialization
-  RegisterTest(TestTFftw64Dft.Suite);
-  RegisterTest(TestTFftw64DftReal2Complex.Suite);
-  RegisterTest(TestTFftw64DftComplex2Real.Suite);
-  RegisterTest(TestTFftw64Real2Real.Suite);
+  RegisterTest('Fftw64', TestTFftw64Dft.Suite);
+  RegisterTest('Fftw64', TestTFftw64DftReal2Complex.Suite);
+  RegisterTest('Fftw64', TestTFftw64DftComplex2Real.Suite);
+  RegisterTest('Fftw64', TestTFftw64Real2Real.Suite);
 (*
-  RegisterTest(TestTFftw64Guru.Suite);
-  RegisterTest(TestTFftw64Guru64.Suite);
+  RegisterTest('Fftw64', TestTFftw64Guru.Suite);
+  RegisterTest('Fftw64', TestTFftw64Guru64.Suite);
 *)
-  RegisterTest(TestTFftw64Wisdom.Suite);
+  RegisterTest('Fftw64', TestTFftw64Wisdom.Suite);
 end.

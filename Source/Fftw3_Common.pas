@@ -6,6 +6,8 @@ const
   CFftwNoTimelimit = -1.0;
 
 type
+  PFftwInt = ^Integer;
+
   TFftwSign = (
     fsForward = -1,
     fsBackward = +1

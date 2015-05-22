@@ -24,12 +24,12 @@ type
 
 {$IFDEF DynLink}
   TFftw64Execute = procedure (const Plan: TFftw64Plan); cdecl;
-  TFftw64PlanDft = function (Rank: Integer; const N: PInteger; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl;
+  TFftw64PlanDft = function (Rank: Integer; const N: PFftwInt; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanDft1D = function (N: Integer; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanDft2D = function (N0, N1: Integer; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanDft3D = function (N0, N1, N2: Integer; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl;
 
-  TFftw64PlanManyDft = function (Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Complex; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PInteger; OutputStride, OutputDist: Integer; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl;
+  TFftw64PlanManyDft = function (Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Complex; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PFftwInt; OutputStride, OutputDist: Integer; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanGuruDft = function (Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanGuruSplitDft = function (Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; Ri, Ii, Ro, Io: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanGuru64Dft = function (Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl;
@@ -37,14 +37,14 @@ type
   TFftw64ExecuteDft = procedure (const Plan: TFftw64Plan; &In, &Out: PFftw64Complex); cdecl;
   TFftw64ExecuteSplitDft = procedure (const Plan: TFftw64Plan; Ri, Ii, Ro, Io: PFftw64Real); cdecl;
 
-  TFftw64PlanManyDftReal2Complex = function (Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Real; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PInteger; OutputStride, OutputDist: Integer; Flags: TFftwFlags): TFftw64Plan; cdecl;
-  TFftw64PlanDftReal2Complex = function (Rank: Integer; const N: PInteger; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags): TFftw64Plan; cdecl;
+  TFftw64PlanManyDftReal2Complex = function (Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Real; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PFftwInt; OutputStride, OutputDist: Integer; Flags: TFftwFlags): TFftw64Plan; cdecl;
+  TFftw64PlanDftReal2Complex = function (Rank: Integer; const N: PFftwInt; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanDftReal2Complex1D = function (N: Integer; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanDftReal2Complex2D = function (N0, N1: Integer; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanDftReal2Complex3D = function (N0, N1, N2: Integer; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags): TFftw64Plan; cdecl;
 
-  TFftw64PlanManyDftComplex2Real = function (Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Complex; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PInteger; OutputStride, OutputDist: Integer; Flags: TFftwFlags): TFftw64Plan; cdecl;
-  TFftw64PlanDftComplex2Real = function (Rank: Integer; const N: PInteger; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl;
+  TFftw64PlanManyDftComplex2Real = function (Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Complex; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PFftwInt; OutputStride, OutputDist: Integer; Flags: TFftwFlags): TFftw64Plan; cdecl;
+  TFftw64PlanDftComplex2Real = function (Rank: Integer; const N: PFftwInt; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanDftComplex2Real1D = function (N: Integer; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanDftComplex2Real2D = function (N0, N1: Integer; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanDftComplex2Real3D = function (N0, N1, N2: Integer; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl;
@@ -64,8 +64,8 @@ type
   TFftw64ExecuteSplitDftReal2Complex = procedure (const Plan: TFftw64Plan; &In, Ro, Io: PFftw64Real); cdecl;
   TFftw64ExecuteSplitDftComplex2Real = procedure (const Plan: TFftw64Plan; Ri, Ii, &Out: PFftw64Real); cdecl;
 
-  TFftw64PlanManyReal2Real = function (Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Real; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PInteger; OutputStride, OutputDist: Integer; const Kind: PFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl;
-  TFftw64PlanReal2Real = function (Rank: Integer; const N: PInteger; &In, &Out: PFftw64Real; const Kind: PFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl;
+  TFftw64PlanManyReal2Real = function (Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Real; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PFftwInt; OutputStride, OutputDist: Integer; const Kind: PFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl;
+  TFftw64PlanReal2Real = function (Rank: Integer; const N: PFftwInt; &In, &Out: PFftw64Real; const Kind: PFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanReal2Real1D = function (N: Integer; &In, &Out: PFftw64Real; Kind: TFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanReal2Real2D = function (N0, N1: Integer; &In, &Out: PFftw64Real; Kind0, Kind1: TFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl;
   TFftw64PlanReal2Real3D = function (N0, N1, N2: Integer; &In, &Out: PFftw64Real; Kind0, Kind1, Kind2: TFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl;
@@ -196,12 +196,12 @@ var
 
 {$ELSE}
   procedure Fftw64Execute(const Plan: TFftw64Plan); cdecl; external CLibFftw64 name 'fftw_execute';
-  function Fftw64PlanDft(Rank: Integer; const N: PInteger; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft';
+  function Fftw64PlanDft(Rank: Integer; const N: PFftwInt; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft';
   function Fftw64PlanDft1D(N: Integer; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_1d';
   function Fftw64PlanDft2D(N0, N1: Integer; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_2d';
   function Fftw64PlanDft3D(N0, N1, N2: Integer; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_3d';
 
-  function Fftw64PlanManyDft(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Complex; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PInteger; OutputStride, OutputDist: Integer; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_many_dft';
+  function Fftw64PlanManyDft(Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Complex; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PFftwInt; OutputStride, OutputDist: Integer; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_many_dft';
   function Fftw64PlanGuruDft(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_guru_dft';
   function Fftw64PlanGuruSplitDft(Rank: Integer; const Dimensions: PFftwIoDim; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim; Ri, Ii, Ro, Io: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_guru_split_dft';
   function Fftw64PlanGuru64Dft(Rank: Integer; const Dimensions: PFftwIoDim64; HowManyRank: Integer; const HowManyDimensions: PFftwIoDim64; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_guru64_dft';
@@ -209,14 +209,14 @@ var
   procedure Fftw64ExecuteDft(const Plan: TFftw64Plan; &In: PFftw64Complex; &Out: PFftw64Complex); cdecl; external CLibFftw64 name 'fftw_Execute_dft';
   procedure Fftw64ExecuteSplitDft(const Plan: TFftw64Plan; Ri, Ii, Ro, Io: PFftw64Real); cdecl; external CLibFftw64 name 'fftw_execute_split_dft';
 
-  function Fftw64PlanManyDftReal2Complex(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Real; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PInteger; OutputStride, OutputDist: Integer; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_many_dft_r2c';
-  function Fftw64PlanDftReal2Complex(Rank: Integer; const N: PInteger; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_r2c';
+  function Fftw64PlanManyDftReal2Complex(Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Real; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PFftwInt; OutputStride, OutputDist: Integer; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_many_dft_r2c';
+  function Fftw64PlanDftReal2Complex(Rank: Integer; const N: PFftwInt; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_r2c';
   function Fftw64PlanDftReal2Complex1D(N: Integer; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_r2c_1d';
   function Fftw64PlanDftReal2Complex2D(N0, N1: Integer; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_r2c_2d';
   function Fftw64PlanDftReal2Complex3D(N0, N1, N2: Integer; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_r2c_3d';
 
-  function Fftw64PlanManyDftComplex2Real(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Complex; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PInteger; OutputStride, OutputDist: Integer; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_many_dft_c2r';
-  function Fftw64PlanDftComplex2Real(Rank: Integer; const N: PInteger; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_c2r';
+  function Fftw64PlanManyDftComplex2Real(Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Complex; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PFftwInt; OutputStride, OutputDist: Integer; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_many_dft_c2r';
+  function Fftw64PlanDftComplex2Real(Rank: Integer; const N: PFftwInt; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_c2r';
   function Fftw64PlanDftComplex2Real1D(N: Integer; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_c2r_1d';
   function Fftw64PlanDftComplex2Real2D(N0, N1: Integer; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_c2r_2d';
   function Fftw64PlanDftComplex2Real3D(N0, N1, N2: Integer; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_dft_c2r_3d';
@@ -236,8 +236,8 @@ var
   procedure Fftw64ExecuteSplitDftReal2Complex(const Plan: TFftw64Plan; &In, Ro, Io: PFftw64Real); cdecl; external CLibFftw64 name 'fftw_execute_split_dft_r2c';
   procedure Fftw64ExecuteSplitDftComplex2Real(const Plan: TFftw64Plan; Ri, Ii, &Out: PFftw64Real); cdecl; external CLibFftw64 name 'fftw_execute_split_dft_c2r';
 
-  function Fftw64PlanManyReal2Real(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Real; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PInteger; OutputStride, OutputDist: Integer; const kind_: PFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_many_r2r';
-  function Fftw64PlanReal2Real(Rank: Integer; const N: PInteger; &In, &Out: PFftw64Real; const Kind: PFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_r2r';
+  function Fftw64PlanManyReal2Real(Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Real; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PFftwInt; OutputStride, OutputDist: Integer; const kind_: PFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_many_r2r';
+  function Fftw64PlanReal2Real(Rank: Integer; const N: PFftwInt; &In, &Out: PFftw64Real; const Kind: PFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_r2r';
   function Fftw64PlanReal2Real1D(N: Integer; &In, &Out: PFftw64Real; Kind: TFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_r2r_1d';
   function Fftw64PlanReal2Real2D(N0, N1: Integer; &In, &Out: PFftw64Real; Kind0, Kind1: TFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_r2r_2d';
   function Fftw64PlanReal2Real3D(N0, N1, N2: Integer; &In, &Out: PFftw64Real; Kind0, Kind1, Kind2: TFftwReal2RealKind; Flags: TFftwFlags): TFftw64Plan; cdecl; external CLibFftw64 name 'fftw_plan_r2r_3d';
@@ -253,15 +253,15 @@ var
   function Fftw64InitThreads: Integer; cdecl; external CLibFftw64 name 'fftw_init_threads';
   procedure Fftw64CleanupThreads; cdecl; external CLibFftw64 name 'fftw_cleanup_threads';
 
-  function Fftw64ExportWisdomToFilename(const FileName: PAnsiChar): Integer; cdecl; external CLibFftw64 name 'fftw_export_wisdom_to_filename';
+  function Fftw64ExportWisdomToFilename(const FileName: PAnsiChar): Boolean; cdecl; external CLibFftw64 name 'fftw_export_wisdom_to_filename';
   procedure Fftw64ExportWisdomToFile(var OutputFile: file); cdecl; external CLibFftw64 name 'fftw_export_wisdom_to_file';
   function Fftw64ExportWisdomToString: PAnsiChar; cdecl; external CLibFftw64 name 'fftw_export_wisdom_to_string';
   procedure Fftw64ExportWisdom(WriteChar: TFftwWriteCharFunc; Data: Pointer); cdecl; external CLibFftw64 name 'fftw_export_wisdom';
 
   function Fftw64ImportSystemWisdom: Integer; cdecl; external CLibFftw64 name 'fftw_import_system_wisdom';
-  function Fftw64ImportWisdomFromFilename(const FileName: PAnsiChar): Integer; cdecl; external CLibFftw64 name 'fftw_import_wisdom_from_filename';
-  function Fftw64ImportWisdomFromFile(var InputFile: file): Integer; cdecl; external CLibFftw64 name 'fftw_import_wisdom_from_file';
-  function Fftw64ImportWisdomFromString(const InputString: PAnsiChar): Integer; cdecl; external CLibFftw64 name 'fftw_import_wisdom_from_string';
+  function Fftw64ImportWisdomFromFilename(const FileName: PAnsiChar): Boolean; cdecl; external CLibFftw64 name 'fftw_import_wisdom_from_filename';
+  function Fftw64ImportWisdomFromFile(var InputFile: file): Boolean; cdecl; external CLibFftw64 name 'fftw_import_wisdom_from_file';
+  function Fftw64ImportWisdomFromString(const InputString: PAnsiChar): Boolean; cdecl; external CLibFftw64 name 'fftw_import_wisdom_from_string';
   function Fftw64ImportWisdom(ReadChar: TFftwReadCharFunc; Data: Pointer): Integer; cdecl; external CLibFftw64 name 'fftw_import_wisdom';
 
   procedure Fftw64FPrintPlan(const Plan: TFftw64Plan; var OutputFile: file); cdecl; external CLibFftw64 name 'fftw_fprint_plan';
@@ -300,11 +300,11 @@ type
 
   TFftw64Dft = class(TCustomFftw64)
   public
-    constructor Create(Rank: Integer; const N: PInteger; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const N: PFftwInt; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
     constructor Create(N: Integer; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
     constructor Create(N0, N1: Integer; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
     constructor Create(N0, N1, N2: Integer; &In, &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
-    constructor CreateMany(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Complex; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PInteger; OutputStride, OutputDist: Integer; Sign: TFftwSign; Flags: TFftwFlags);
+    constructor CreateMany(Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Complex; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PFftwInt; OutputStride, OutputDist: Integer; Sign: TFftwSign; Flags: TFftwFlags);
 
     procedure Execute(&In, &Out: PFftw64Complex); overload;
     procedure Execute(Ri, Ii, Ro, Io: PFftw64Real); overload;
@@ -312,11 +312,11 @@ type
 
   TFftw64DftReal2Complex = class(TCustomFftw64)
   public
-    constructor Create(Rank: Integer; const N: PInteger; &In: PFftw64Real; &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const N: PFftwInt; &In: PFftw64Real; &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags); overload;
     constructor Create(N: Integer; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags); overload;
     constructor Create(N0, N1: Integer; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags); overload;
     constructor Create(N0, N1, N2: Integer; &In: PFftw64Real; &Out: PFftw64Complex; Flags: TFftwFlags); overload;
-    constructor CreateMany(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Real; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PInteger; OutputStride, OutputDist: Integer; Flags: TFftwFlags);
+    constructor CreateMany(Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Real; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Complex; const onembed: PFftwInt; OutputStride, OutputDist: Integer; Flags: TFftwFlags);
 
     procedure Execute(&In: PFftw64Real; &Out: PFftw64Complex); overload;
     procedure Execute(&In, Ro, Io: PFftw64Real); overload;
@@ -324,11 +324,11 @@ type
 
   TFftw64DftComplex2Real = class(TCustomFftw64)
   public
-    constructor Create(Rank: Integer; const N: PInteger; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const N: PFftwInt; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags); overload;
     constructor Create(N: Integer; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags); overload;
     constructor Create(N0, N1: Integer; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags); overload;
     constructor Create(N0, N1, N2: Integer; &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags); overload;
-    constructor CreateMany(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Complex; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PInteger; OutputStride, OutputDist: Integer; Flags: TFftwFlags);
+    constructor CreateMany(Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Complex; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PFftwInt; OutputStride, OutputDist: Integer; Flags: TFftwFlags);
 
     procedure Execute(&In: PFftw64Complex; &Out: PFftw64Real); overload;
     procedure Execute(Ri, Ii, &Out: PFftw64Real); overload;
@@ -336,11 +336,11 @@ type
 
   TFftw64Real2Real = class(TCustomFftw64)
   public
-    constructor Create(Rank: Integer; const N: PInteger; &In, &Out: PFftw64Real; const Kind: PFftwReal2RealKind; Flags: TFftwFlags); overload;
+    constructor Create(Rank: Integer; const N: PFftwInt; &In, &Out: PFftw64Real; const Kind: PFftwReal2RealKind; Flags: TFftwFlags); overload;
     constructor Create(N: Integer; &In, &Out: PFftw64Real; Kind: TFftwReal2RealKind; Flags: TFftwFlags); overload;
     constructor Create(N0, N1: Integer; &In, &Out: PFftw64Real; Kind0, Kind1: TFftwReal2RealKind; Flags: TFftwFlags); overload;
     constructor Create(N0, N1, N2: Integer; &In, &Out: PFftw64Real; Kind0, Kind1, Kind2: TFftwReal2RealKind; Flags: TFftwFlags); overload;
-    constructor CreateMany(Rank: Integer; const N: PInteger; HowMany: Integer; &In: PFftw64Real; const inembed: PInteger; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PInteger; OutputStride, OutputDist: Integer; const Kind: PFftwReal2RealKind; Flags: TFftwFlags);
+    constructor CreateMany(Rank: Integer; const N: PFftwInt; HowMany: Integer; &In: PFftw64Real; const inembed: PFftwInt; InputStride, InputDist: Integer; &Out: PFftw64Real; const onembed: PFftwInt; OutputStride, OutputDist: Integer; const Kind: PFftwReal2RealKind; Flags: TFftwFlags);
 
     procedure Execute(&In, &Out: PFftw64Real); overload;
   end;
@@ -392,7 +392,13 @@ implementation
 
 {$IFDEF DynLink}
 uses
+{$IFDEF FPC}
+  DynLibs;
+{$ELSE}
+{$IFDEF MSWindows}
   Windows;
+{$ENDIF}
+{$ENDIF}
 {$ENDIF}
 
 { TCustomFftw64 }
@@ -435,7 +441,7 @@ end;
 
 { TFftw64Dft }
 
-constructor TFftw64Dft.Create(Rank: Integer; const N: PInteger; &In,
+constructor TFftw64Dft.Create(Rank: Integer; const N: PFftwInt; &In,
   &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags);
 begin
   FPlan := Fftw64PlanDft(Rank, N, &In, &Out, Sign, Flags);
@@ -459,9 +465,9 @@ begin
   FPlan := Fftw64PlanDft3D(N0, N1, N2, &In, &Out, Sign, Flags);
 end;
 
-constructor TFftw64Dft.CreateMany(Rank: Integer; const N: PInteger;
-  HowMany: Integer; &In: PFftw64Complex; const inembed: PInteger; InputStride,
-  InputDist: Integer; &Out: PFftw64Complex; const onembed: PInteger;
+constructor TFftw64Dft.CreateMany(Rank: Integer; const N: PFftwInt;
+  HowMany: Integer; &In: PFftw64Complex; const inembed: PFftwInt; InputStride,
+  InputDist: Integer; &Out: PFftw64Complex; const onembed: PFftwInt;
   OutputStride, OutputDist: Integer; Sign: TFftwSign; Flags: TFftwFlags);
 begin
   FPlan := Fftw64PlanManyDft(Rank, N, HowMany, &In, inembed, InputStride,
@@ -481,7 +487,7 @@ end;
 
 { TFftw64DftReal2Complex }
 
-constructor TFftw64DftReal2Complex.Create(Rank: Integer; const N: PInteger;
+constructor TFftw64DftReal2Complex.Create(Rank: Integer; const N: PFftwInt;
   &In: PFftw64Real; &Out: PFftw64Complex; Sign: TFftwSign; Flags: TFftwFlags);
 begin
   FPlan := Fftw64PlanDftReal2Complex(Rank, N, &In, &Out, Flags);
@@ -505,9 +511,9 @@ begin
   FPlan := Fftw64PlanDftReal2Complex3D(N0, N1, N2, &In, &Out, Flags);
 end;
 
-constructor TFftw64DftReal2Complex.CreateMany(Rank: Integer; const N: PInteger;
-  HowMany: Integer; &In: PFftw64Real; const inembed: PInteger; InputStride,
-  InputDist: Integer; &Out: PFftw64Complex; const onembed: PInteger;
+constructor TFftw64DftReal2Complex.CreateMany(Rank: Integer; const N: PFftwInt;
+  HowMany: Integer; &In: PFftw64Real; const inembed: PFftwInt; InputStride,
+  InputDist: Integer; &Out: PFftw64Complex; const onembed: PFftwInt;
   OutputStride, OutputDist: Integer; Flags: TFftwFlags);
 begin
   FPlan := Fftw64PlanManyDftReal2Complex(Rank, N, HowMany, &In, inembed, InputStride,
@@ -527,7 +533,7 @@ end;
 
 { TFftw64DftComplex2Real }
 
-constructor TFftw64DftComplex2Real.Create(Rank: Integer; const N: PInteger;
+constructor TFftw64DftComplex2Real.Create(Rank: Integer; const N: PFftwInt;
   &In: PFftw64Complex; &Out: PFftw64Real; Flags: TFftwFlags);
 begin
   FPlan := Fftw64PlanDftComplex2Real(Rank, N, &In, &Out, Flags);
@@ -551,9 +557,9 @@ begin
   FPlan := Fftw64PlanDftComplex2Real3D(N0, N1, N2, &In, &Out, Flags);
 end;
 
-constructor TFftw64DftComplex2Real.CreateMany(Rank: Integer; const N: PInteger;
-  HowMany: Integer; &In: PFftw64Complex; const inembed: PInteger; InputStride,
-  InputDist: Integer; &Out: PFftw64Real; const onembed: PInteger;
+constructor TFftw64DftComplex2Real.CreateMany(Rank: Integer; const N: PFftwInt;
+  HowMany: Integer; &In: PFftw64Complex; const inembed: PFftwInt; InputStride,
+  InputDist: Integer; &Out: PFftw64Real; const onembed: PFftwInt;
   OutputStride, OutputDist: Integer; Flags: TFftwFlags);
 begin
   FPlan := Fftw64PlanManyDftComplex2Real(Rank, N, HowMany, &In, inembed, InputStride,
@@ -573,7 +579,7 @@ end;
 
 { TFftw64Real2Real }
 
-constructor TFftw64Real2Real.Create(Rank: Integer; const N: PInteger;
+constructor TFftw64Real2Real.Create(Rank: Integer; const N: PFftwInt;
   &In, &Out: PFftw64Real; const Kind: PFftwReal2RealKind; Flags: TFftwFlags);
 begin
   FPlan := Fftw64PlanReal2Real(Rank, N, &In, &Out, Kind, Flags);
@@ -598,9 +604,9 @@ begin
     Flags);
 end;
 
-constructor TFftw64Real2Real.CreateMany(Rank: Integer; const N: PInteger;
-  HowMany: Integer; &In: PFftw64Real; const inembed: PInteger; InputStride,
-  InputDist: Integer; &Out: PFftw64Real; const onembed: PInteger;
+constructor TFftw64Real2Real.CreateMany(Rank: Integer; const N: PFftwInt;
+  HowMany: Integer; &In: PFftw64Real; const inembed: PFftwInt; InputStride,
+  InputDist: Integer; &Out: PFftw64Real; const onembed: PFftwInt;
   OutputStride, OutputDist: Integer; const Kind: PFftwReal2RealKind;
   Flags: TFftwFlags);
 begin
